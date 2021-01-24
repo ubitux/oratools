@@ -26,5 +26,6 @@ def parse_fmt(data, fmt):
 def read_data_fmt(reader, fmt):
     n = struct.calcsize(fmt)
     data = reader.read(n)
-    assert len(data) == n
+    if len(data) != n:
+        raise ValueError(f'Read only {len(data)} bytes out of {n} requested')
     return parse_fmt(data, fmt)
