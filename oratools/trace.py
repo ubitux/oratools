@@ -30,11 +30,15 @@ def trace(filename, orders_filter, forced_version):
         fmt = FileDemuxer(f, forced_version)
         dec = Decoder(fmt.game_info)
         logging.info(f'Game info: {pprint.pformat(fmt.game_info)}')
-        for pkt in fmt.read_packet():
-            logging.info(f'PKT {pkt}')
-            for order in dec.decode_packet(pkt):
-                if orders_filter is None or order.type == orders_filter:
-                    logging.info(f'  ORD {order}')
+        try:
+            for pkt in fmt.read_packet():
+                logging.info(f'PKT {pkt}')
+                for order in dec.decode_packet(pkt):
+                    if orders_filter is None or order.type == orders_filter:
+                        logging.info(f'  ORD {order}')
+        except ValueError as e:
+            logging.error(e)
+
 
 
 def run():

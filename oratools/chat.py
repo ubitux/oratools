@@ -29,18 +29,21 @@ def chat(filename, forced_version):
         fmt = FileDemuxer(f, forced_version)
         dec = Decoder(fmt.game_info)
         dialogues = []
-        for pkt in fmt.read_packet():
-            for order in dec.decode_packet(pkt):
-                if order.type == 'Handshake' and order.key == b'Chat':  # older version
-                    dialog = order.value.decode()
-                    team_chat = False  # probably inaccurate
-                elif order.type == 'Fields' and order.field == b'Chat':
-                    dialog = order.info['target'].decode()
-                    team_chat = order.info.get('extra_data') is not None
-                else:
-                    continue
-                name = dec.get_name(pkt.client)
-                dialogues.append((name, team_chat, dialog))
+        try:
+            for pkt in fmt.read_packet():
+                for order in dec.decode_packet(pkt):
+                    if order.type == 'Handshake' and order.key == b'Chat':  # older version
+                        dialog = order.value.decode()
+                        team_chat = False  # probably inaccurate
+                    elif order.type == 'Fields' and order.field == b'Chat':
+                        dialog = order.info['target'].decode()
+                        team_chat = order.info.get('extra_data') is not None
+                    else:
+                        continue
+                    name = dec.get_name(pkt.client)
+                    dialogues.append((name, team_chat, dialog))
+        except ValueError as e:
+            logging.error(e)
 
         name_padding = max(len(name) for name, _, _ in dialogues)
         for name, team_chat, dialog in dialogues:
