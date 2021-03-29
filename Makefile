@@ -1,17 +1,13 @@
 PYTHON ?= python
 VENV   ?= venv
 
-ACTIVATE = $(VENV)/bin/activate
-
-install: $(VENV)
-	( . $(ACTIVATE) && pip install -e .)
-
 $(VENV):
 	$(PYTHON) -m venv $@
-	( . $(ACTIVATE) && pip install pytest)
+	$(VENV)/bin/python -m pip install pytest
+	$(VENV)/bin/python -m pip install -e .
 
 tests: $(VENV)
-	( . $(ACTIVATE) && pytest -v $@)
+	$(VENV)/bin/pytest -v
 
 clean:
 	$(RM) -r build
