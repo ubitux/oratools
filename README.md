@@ -18,6 +18,7 @@ the following tools should be available:
 ### Build Order
 ```
 ☭ ora-buildorder ~/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
+Replay: /home/user/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
 i like men:
   00:02.280 → 00:10.680: powr
   00:11.160 → 00:24.600: tent
@@ -35,6 +36,7 @@ gggggggggggggggg:
 ### Chat
 ```
 ☭ ora-chat ~/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
+Replay: /home/user/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
 [all]  <^^ZxGanon^^|RV>  okay
 [all]  <^^ZxGanon^^|RV>  ich nehm die map hier
 [all]               <U>  k

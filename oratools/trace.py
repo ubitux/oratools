@@ -25,6 +25,7 @@ from .demuxer import FileDemuxer
 
 
 def trace(filename, orders_filter):
+    logging.info(f'Replay: {filename}')
     with open(filename, 'rb') as f:
         fmt = FileDemuxer(f)
         dec = Decoder(fmt.game_info)

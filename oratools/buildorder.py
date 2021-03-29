@@ -48,6 +48,7 @@ def _remove_queue_items(queue, target, count):
 
 
 def buildorder(filename):
+    logging.info(f'Replay: {filename}')
     with open(filename, 'rb') as f:
 
         builds = {}
