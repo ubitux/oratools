@@ -23,6 +23,7 @@ import logging
 from .buildorder import buildorder
 from .chat import chat
 from .trace import trace
+from .mappack import mappack
 
 
 def _get_next_filename(targets):
@@ -35,6 +36,20 @@ def _get_next_filename(targets):
             yield filename
 
 
+def _replay_opt(fn, args):
+    for replay in _get_next_filename(args.replay):
+        logging.info(f'Replay: {replay}')
+        try:
+            fn(replay, args)
+        except:
+            logging.error('unable to read %s', replay)
+
+
+def _mappack(args):
+    args.maps = [m for m in _get_next_filename(args.maps) if m.endswith('.oramap')]
+    mappack(args)
+
+
 def run():
     parser = argparse.ArgumentParser()
     parser.add_argument('--forced-version', help='Force a version, useful to trace an invalid/truncated replay')
@@ -44,16 +59,27 @@ def run():
 
     chat_p = subparsers.add_parser('chat')
     chat_p.add_argument('replay', nargs='+')
-    chat_p.set_defaults(func=chat)
+    chat_p.set_defaults(func=lambda args: _replay_opt(chat, args))
 
     trace_p = subparsers.add_parser('trace')
     trace_p.add_argument('--filter', help='Orders filter')
     trace_p.add_argument('replay', nargs='+')
-    trace_p.set_defaults(func=trace)
+    trace_p.set_defaults(func=lambda args: _replay_opt(trace, args))
 
     buildorder_p = subparsers.add_parser('buildorder')
     buildorder_p.add_argument('replay', nargs='+')
-    buildorder_p.set_defaults(func=buildorder)
+    buildorder_p.set_defaults(func=lambda args: _replay_opt(buildorder, args))
+
+    mappack_p = subparsers.add_parser('mappack')
+    mappack_p.add_argument('--category', help='Set custom map category')
+    mappack_p.add_argument('--title', help='Title reformat, use "{title}" to re-use existing')
+    mappack_p.add_argument('--fname', help='File reformat, use "{fname}" to re-use filename')
+    mappack_p.add_argument('--overlay', help='Image overlay')
+    mappack_p.add_argument('--ext', nargs='+', help='Extension to add (directory with an _extension.yaml file)')
+    mappack_p.add_argument('--rm', nargs='+', help='Files to remove (also try to drop associated refs)')
+    mappack_p.add_argument('--out-dir', default='.', help='Output directory')
+    mappack_p.add_argument('maps', nargs='+')
+    mappack_p.set_defaults(func=_mappack)
 
     args = parser.parse_args()
 
@@ -62,9 +88,4 @@ def run():
         return
 
     logging.basicConfig(level='INFO', format='%(message)s')
-    for replay in _get_next_filename(args.replay):
-        logging.info(f'Replay: {replay}')
-        try:
-            args.func(replay, args)
-        except:
-            logging.error('unable to read %s', replay)
+    args.func(args)

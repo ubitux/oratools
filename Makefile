@@ -4,6 +4,7 @@ VENV   ?= venv
 $(VENV):
 	$(PYTHON) -m venv $@
 	$(VENV)/bin/python -m pip install pytest
+	$(VENV)/bin/python -m pip install -r requirements.txt
 	$(VENV)/bin/python -m pip install -e .
 
 tests: $(VENV)
