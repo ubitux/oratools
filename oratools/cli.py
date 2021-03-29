@@ -15,13 +15,24 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
+import os
+import os.path as op
 import argparse
 import logging
 
 from .buildorder import buildorder
 from .chat import chat
 from .trace import trace
-from .cli_utils import cli_init, get_next_replay
+
+
+def _get_next_replay(replays):
+    for filename in sorted(replays):
+        if op.isdir(filename):
+            for root, dirs, files in os.walk(filename):
+                for name in files:
+                    yield op.join(root, name)
+        else:
+            yield filename
 
 
 def run():
@@ -50,8 +61,8 @@ def run():
         parser.print_help()
         return
 
-    cli_init()
-    for replay in get_next_replay(args.replay):
+    logging.basicConfig(level='INFO', format='%(message)s')
+    for replay in _get_next_replay(args.replay):
         logging.info(f'Replay: {replay}')
         try:
             args.func(replay, args)
