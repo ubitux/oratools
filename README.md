@@ -4,20 +4,20 @@ This repository contains some experimental tooling for working with OpenRA
 replay/network code.
 
 After running `make` and entering the virtual env with `. venv/bin/activate`,
-the following tools should be available:
+`ora-tool` with the following tools:
 
-- `ora-buildorder`: try to figure the build orders from the specified
+- `ora-tool buildorder`: try to figure the build orders from the specified
   replay(s); doesn't work that great because it requires the complete game
   emulation
-- `ora-chat`: display chat events from the specified replay(s)
-- `ora-trace`: demux (split into packets) and decode (extract orders from
+- `ora-tool chat`: display chat events from the specified replay(s)
+- `ora-tool trace`: demux (split into packets) and decode (extract orders from
   packets) from the specified replay(s); useful for getting a debugging trace
 
 ## Examples
 
 ### Build Order
 ```
-☭ ora-buildorder ~/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
+☭ ora-tool buildorder ~/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
 Replay: /home/user/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
 i like men:
   00:02.280 → 00:10.680: powr
@@ -35,7 +35,7 @@ gggggggggggggggg:
 
 ### Chat
 ```
-☭ ora-chat ~/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
+☭ ora-tool chat ~/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
 Replay: /home/user/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
 [all]  <^^ZxGanon^^|RV>  okay
 [all]  <^^ZxGanon^^|RV>  ich nehm die map hier
@@ -49,7 +49,7 @@ Replay: /home/user/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG
 ### Trace
 
 ```
-☭ ora-trace --filter Fields ~/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-AMO-HAP-G1.orarep
+☭ ora-tool trace --filter Fields ~/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-AMO-HAP-G1.orarep
 [...]
 PKT client:3 frame:632 datalen:5
 PKT client:12 frame:636 datalen:0

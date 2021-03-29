@@ -15,18 +15,15 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import argparse
 import logging
 
-from .cli_utils import cli_init, get_next_replay
 from .decoder import Decoder
 from .demuxer import FileDemuxer
 
 
-def chat(filename, forced_version):
-    logging.info(f'Replay: {filename}')
+def chat(filename, args):
     with open(filename, 'rb') as f:
-        fmt = FileDemuxer(f, forced_version)
+        fmt = FileDemuxer(f, args.forced_version)
         dec = Decoder(fmt.game_info)
         dialogues = []
         try:
@@ -53,16 +50,3 @@ def chat(filename, forced_version):
             prefix = f'[team]' if team_chat else '[all] '
             name = f'<{name}>'
             logging.info(f'{prefix.ljust(4+2)} {name.rjust(name_padding+2)}  {dialog}')
-
-
-def run():
-    cli_init()
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--forced-version', help='Force a version, useful to trace an invalid/truncated replay')
-    parser.add_argument('replay', nargs='+')
-    args = parser.parse_args()
-    for replay in get_next_replay(args.replay):
-        try:
-            chat(replay, args.forced_version)
-        except:
-            logging.error('unable to read %s', replay)

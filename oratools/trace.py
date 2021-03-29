@@ -15,19 +15,17 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import argparse
 import logging
 import pprint
 
-from .cli_utils import cli_init, get_next_replay
 from .decoder import Decoder
 from .demuxer import FileDemuxer
 
 
-def trace(filename, orders_filter, forced_version):
-    logging.info(f'Replay: {filename}')
+def trace(filename, args):
+    orders_filter = args.filter
     with open(filename, 'rb') as f:
-        fmt = FileDemuxer(f, forced_version)
+        fmt = FileDemuxer(f, args.forced_version)
         dec = Decoder(fmt.game_info)
         logging.info(f'Game info: {pprint.pformat(fmt.game_info)}')
         try:
@@ -38,18 +36,3 @@ def trace(filename, orders_filter, forced_version):
                         logging.info(f'  ORD {order}')
         except ValueError as e:
             logging.error(e)
-
-
-
-def run():
-    cli_init()
-    parser = argparse.ArgumentParser()
-    parser.add_argument('--filter', help='Orders filter')
-    parser.add_argument('--forced-version', help='Force a version, useful to trace an invalid/truncated replay')
-    parser.add_argument('replay', nargs='+')
-    args = parser.parse_args()
-    for replay in get_next_replay(args.replay):
-        try:
-            trace(replay, args.filter, args.forced_version)
-        except:
-            logging.error('unable to read %s', replay)

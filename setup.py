@@ -7,9 +7,7 @@ setup(
     zip_safe=False,
     entry_points=dict(
         console_scripts=[
-            'ora-trace = oratools.trace:run',
-            'ora-buildorder = oratools.buildorder:run',
-            'ora-chat = oratools.chat:run',
+            'ora-tool = oratools.cli:run',
         ],
     ),
 )

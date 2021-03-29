@@ -15,10 +15,8 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 
-import argparse
 import logging
 
-from .cli_utils import cli_init, get_next_replay
 from .decoder import Decoder
 from .demuxer import FileDemuxer
 
@@ -47,14 +45,13 @@ def _remove_queue_items(queue, target, count):
         queue[i] = (qframe, qtarget, qcount - count)
 
 
-def buildorder(filename, forced_version):
-    logging.info(f'Replay: {filename}')
+def buildorder(filename, args):
     with open(filename, 'rb') as f:
 
         builds = {}
         queues = {}
 
-        fmt = FileDemuxer(f, forced_version)
+        fmt = FileDemuxer(f, args.forced_version)
         dec = Decoder(fmt.game_info)
         for pkt in fmt.read_packet():
             for order in dec.decode_packet(pkt):
@@ -95,15 +92,3 @@ def buildorder(filename, forced_version):
                 t0 = dec.get_frame_time(start_frame)
                 t1 = dec.get_frame_time(end_frame)
                 logging.info(f'  {t0} → {t1}: {struct.decode()}')
-
-
-def run():
-    cli_init()
-    parser = argparse.ArgumentParser()
-    parser.add_argument('replay', nargs='+')
-    args = parser.parse_args()
-    for replay in get_next_replay(args.replay):
-        try:
-            buildorder(replay, args.forced_version)
-        except:
-            logging.error('unable to read %s', replay)
