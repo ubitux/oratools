@@ -25,8 +25,8 @@ from .chat import chat
 from .trace import trace
 
 
-def _get_next_replay(replays):
-    for filename in sorted(replays):
+def _get_next_filename(targets):
+    for filename in sorted(targets):
         if op.isdir(filename):
             for root, dirs, files in os.walk(filename):
                 for name in files:
@@ -62,7 +62,7 @@ def run():
         return
 
     logging.basicConfig(level='INFO', format='%(message)s')
-    for replay in _get_next_replay(args.replay):
+    for replay in _get_next_filename(args.replay):
         logging.info(f'Replay: {replay}')
         try:
             args.func(replay, args)
