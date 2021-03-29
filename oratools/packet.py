@@ -45,9 +45,14 @@ class Packet:
             client, length = length, client
 
         if length < 4:
+            if length == 1:  # EOF marker (pre-footer)
+                return None
+            print(f'Invalid packet length {length} from client {client}: {f.read()}')
             return None
         data = f.read(length - 4)
-        assert len(data) == length - 4
+        if len(data) != length - 4:
+            print(f'Read only {len(data)} bytes out of {length - 4} from client {client}')
+            return None
         return cls(client, frame, data)
 
     def send(self, s):
