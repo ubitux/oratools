@@ -17,8 +17,8 @@ After running `make` and entering the virtual env with `. venv/bin/activate`,
 
 ### Build Order
 ```
-☭ ora-tool buildorder ~/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
-Replay: /home/user/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
+☭ ora-tool buildorder ~/.config/openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
+Replay: /home/user/.config/openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-GOA-ILM-G1.orarep
 i like men:
   00:02.280 → 00:10.680: powr
   00:11.160 → 00:24.600: tent
@@ -35,8 +35,8 @@ gggggggggggggggg:
 
 ### Chat
 ```
-☭ ora-tool chat ~/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
-Replay: /home/user/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
+☭ ora-tool chat ~/.config/openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
+Replay: /home/user/.config/openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
 [all]  <^^ZxGanon^^|RV>  okay
 [all]  <^^ZxGanon^^|RV>  ich nehm die map hier
 [all]               <U>  k
@@ -49,7 +49,7 @@ Replay: /home/user/.openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG
 ### Trace
 
 ```
-☭ ora-tool trace --filter Fields ~/.openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-AMO-HAP-G1.orarep
+☭ ora-tool trace --filter Fields ~/.config/openra/Replays/ra/release-20200503/RAGL-S09-MASTER-GROUP-AMO-HAP-G1.orarep
 [...]
 PKT client:3 frame:632 datalen:5
 PKT client:12 frame:636 datalen:0
