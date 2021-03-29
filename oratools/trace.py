@@ -49,4 +49,7 @@ def run():
     parser.add_argument('replay', nargs='+')
     args = parser.parse_args()
     for replay in get_next_replay(args.replay):
-        trace(replay, args.filter)
+        try:
+            trace(replay, args.filter, args.forced_version)
+        except:
+            logging.error('unable to read %s', replay)
