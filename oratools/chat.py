@@ -45,6 +45,9 @@ def chat(filename, forced_version):
         except ValueError as e:
             logging.error(e)
 
+        if not dialogues:
+            return
+
         name_padding = max(len(name) for name, _, _ in dialogues)
         for name, team_chat, dialog in dialogues:
             prefix = f'[team]' if team_chat else '[all] '
