@@ -24,10 +24,10 @@ from .decoder import Decoder
 from .demuxer import FileDemuxer
 
 
-def trace(filename, orders_filter):
+def trace(filename, orders_filter, forced_version):
     logging.info(f'Replay: {filename}')
     with open(filename, 'rb') as f:
-        fmt = FileDemuxer(f)
+        fmt = FileDemuxer(f, forced_version)
         dec = Decoder(fmt.game_info)
         logging.info(f'Game info: {pprint.pformat(fmt.game_info)}')
         for pkt in fmt.read_packet():
@@ -41,6 +41,7 @@ def run():
     cli_init()
     parser = argparse.ArgumentParser()
     parser.add_argument('--filter', help='Orders filter')
+    parser.add_argument('--forced-version', help='Force a version, useful to trace an invalid/truncated replay')
     parser.add_argument('replay', nargs='+')
     args = parser.parse_args()
     for replay in get_next_replay(args.replay):

@@ -23,10 +23,10 @@ from .decoder import Decoder
 from .demuxer import FileDemuxer
 
 
-def chat(filename):
+def chat(filename, forced_version):
     logging.info(f'Replay: {filename}')
     with open(filename, 'rb') as f:
-        fmt = FileDemuxer(f)
+        fmt = FileDemuxer(f, forced_version)
         dec = Decoder(fmt.game_info)
         dialogues = []
         for pkt in fmt.read_packet():
@@ -52,6 +52,7 @@ def chat(filename):
 def run():
     cli_init()
     parser = argparse.ArgumentParser()
+    parser.add_argument('--forced-version', help='Force a version, useful to trace an invalid/truncated replay')
     parser.add_argument('replay', nargs='+')
     args = parser.parse_args()
     for replay in get_next_replay(args.replay):

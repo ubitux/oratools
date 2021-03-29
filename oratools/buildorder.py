@@ -47,14 +47,14 @@ def _remove_queue_items(queue, target, count):
         queue[i] = (qframe, qtarget, qcount - count)
 
 
-def buildorder(filename):
+def buildorder(filename, forced_version):
     logging.info(f'Replay: {filename}')
     with open(filename, 'rb') as f:
 
         builds = {}
         queues = {}
 
-        fmt = FileDemuxer(f)
+        fmt = FileDemuxer(f, forced_version)
         dec = Decoder(fmt.game_info)
         for pkt in fmt.read_packet():
             for order in dec.decode_packet(pkt):
