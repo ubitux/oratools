@@ -34,8 +34,12 @@ class FileDemuxer(_Demuxer):
     START_MARKER = -1
     END_MARKER = -2
 
-    def __init__(self, input_file):
+    def __init__(self, input_file, forced_version=None):
         self._input_file = input_file
+
+        if forced_version:
+            self.game_info = {'Root': {'Version': forced_version}}
+            return
 
         # probe footer
         # TODO: check file size
