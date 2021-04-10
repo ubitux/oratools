@@ -19,11 +19,14 @@ from PIL import Image
 import logging
 import os
 import os.path as op
+import re
 import shutil
 import tempfile
+import unicodedata
 import zipfile
 
 
+_special_regex = re.compile(r'[^A-Za-z0-9]+')
 _extension_fname = '_extension.yaml'
 _expected_files = {'map.bin', 'map.png', 'map.yaml'}
 _colors = dict(zip(
@@ -115,12 +118,13 @@ def _get_new_map_yml_content(map_yml, extensions, args):
         for line in mapf:
             line = line.rstrip()
 
-            if args.title and line.startswith('Title:'):
+            if line.startswith('Title:'):
                 cur_title = line.split(':', maxsplit=1)[1].strip()
-                new_title = args.title.format(title=cur_title)
-                logging.info(f'[-] Title: "%s" → "%s"', cur_title, new_title)
-                lines.append(f'Title: {new_title}')
-                continue
+                new_title = _reformat_title(args, cur_title)
+                if new_title != cur_title:
+                    logging.info(f'[-] Title: "%s" → "%s"', cur_title, new_title)
+                    lines.append(f'Title: {new_title}')
+                    continue
 
             if args.category and line.startswith('Categories:'):
                 cur_category = line.split(':', maxsplit=1)[1].strip()
@@ -142,23 +146,38 @@ def _get_new_map_yml_content(map_yml, extensions, args):
     return '\n'.join(lines)
 
 
+def _extract_title(mapf):
+    for line in mapf:
+        if line.startswith(b'Title:'):
+            return line.split(b':', maxsplit=1)[1].strip().decode()
+
+
+def _reformat_title(args, title):
+    if args.title:
+        title = args.title.format(title=title)
+    return title
+
+
 def mappack(args):
 
     if args.title and '{title}' not in args.title:
         raise ValueError('Title must contain "{title}"')
 
-    if args.fname and '{fname}' not in args.fname:
-        raise ValueError('Filename must contain "{fname}"')
-
     with tempfile.TemporaryDirectory(prefix='oratools-') as tmpdirname:
         for mapfile in args.maps:
 
-            mapname, _ = op.splitext(op.basename(mapfile))
-            mapdir = op.join(tmpdirname, mapname)
-            logging.info('=== Map: %s ===', mapname)
-
             # Extract current map data in a temporary directory
             with zipfile.ZipFile(mapfile) as zipf:
+
+                # Compute a new base filename for the map from its Title
+                with zipf.open('map.yaml') as mapf:
+                    mapname = _reformat_title(args, _extract_title(mapf))
+                    mapname = unicodedata.normalize('NFKD', mapname).encode('ascii', 'ignore').decode()
+                    mapname = _special_regex.sub('-', mapname).strip('-')
+                    mapname = mapname.lower()
+
+                logging.info('=== Map: %s ===', mapname)
+                mapdir = op.join(tmpdirname, mapname)
                 map_files = set(op.join(mapdir, f) for f in zipf.namelist())
                 zipf.extractall(path=mapdir)
 
@@ -194,8 +213,7 @@ def mappack(args):
 
             # Zip referenced content into the new map
             os.makedirs(args.out_dir, exist_ok=True)
-            new_mapname = args.fname.format(fname=mapname) if args.fname else mapname
-            out_map = op.join(args.out_dir, new_mapname + '.oramap')
+            out_map = op.join(args.out_dir, mapname + '.oramap')
             logging.info('[+] Creating %s', out_map)
             with zipfile.ZipFile(out_map, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as mapf:
                 files = map_files | ext_files | remove_files
