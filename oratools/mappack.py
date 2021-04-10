@@ -26,6 +26,7 @@ import unicodedata
 import zipfile
 
 
+_tag_regex = re.compile(r'\s*\[[^\]]*\]')
 _special_regex = re.compile(r'[^A-Za-z0-9]+')
 _extension_fname = '_extension.yaml'
 _expected_files = {'map.bin', 'map.png', 'map.yaml'}
@@ -153,6 +154,8 @@ def _extract_title(mapf):
 
 
 def _reformat_title(args, title):
+    if args.strip_tags:
+        title = _tag_regex.sub('', title)
     if args.title:
         title = args.title.format(title=title)
     return title

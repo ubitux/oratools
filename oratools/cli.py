@@ -73,6 +73,7 @@ def run():
     mappack_p = subparsers.add_parser('mappack')
     mappack_p.add_argument('--category', help='Set custom map category')
     mappack_p.add_argument('--title', help='Title reformat, use "{title}" to re-use existing')
+    mappack_p.add_argument('--strip-tags', action='store_true', default=False, help='Strip existing [TAGS] from title')
     mappack_p.add_argument('--overlay', help='Image overlay')
     mappack_p.add_argument('--ext', nargs='+', help='Extension to add (directory with an _extension.yaml file)')
     mappack_p.add_argument('--rm', nargs='+', help='Files to remove (also try to drop associated refs)')
