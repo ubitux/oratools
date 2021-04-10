@@ -21,6 +21,7 @@ import os
 import os.path as op
 import re
 import shutil
+import sys
 import tempfile
 import unicodedata
 import zipfile
@@ -37,6 +38,8 @@ _colors = dict(zip(
 
 
 def _colored(text, color):
+    if sys.stdout.isatty():
+        return text
     return _colors[color] + text + '\033[0m'
 
 
