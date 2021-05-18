@@ -31,22 +31,26 @@ def chat(filename, args):
                 for order in dec.decode_packet(pkt):
                     if order.type == 'Handshake' and order.key == b'Chat':  # older version
                         dialog = order.value.decode()
-                        team_chat = False  # probably inaccurate
+                        source = 'all'  # probably inaccurate
                     elif order.type == 'Fields' and order.field == b'Chat':
                         dialog = order.info['target'].decode()
-                        team_chat = order.info.get('extra_data') is not None
+                        source = 'all' if order.info.get('extra_data') is None else 'team'
+                    elif order.type == 'Fields' and order.field == b'Message':
+                        dialog = order.info['target'].decode()
+                        source = 'server'
                     else:
                         continue
-                    name = dec.get_name(pkt.client)
-                    dialogues.append((name, team_chat, dialog))
+                    name = dec.get_name(pkt.client) if source != 'server' else None
+                    dialogues.append((name, source, dialog))
         except ValueError as e:
             logging.error(e)
 
         if not dialogues:
             return
 
-        name_padding = max(len(name) for name, _, _ in dialogues)
-        for name, team_chat, dialog in dialogues:
-            prefix = f'[team]' if team_chat else '[all] '
-            name = f'<{name}>'
-            logging.info(f'{prefix.ljust(4+2)} {name.rjust(name_padding+2)}  {dialog}')
+        name_padding = max(len(name) for name, _, _ in dialogues if name is not None)
+        source_padding = max(len(source) for _, source, _ in dialogues if source is not None)
+        for name, source, dialog in dialogues:
+            prefix = f'[{source}]'
+            name = f'<{name}>' if name is not None else ''
+            logging.info(f'{prefix.ljust(source_padding+2)} {name.rjust(name_padding+2)}  {dialog}')
