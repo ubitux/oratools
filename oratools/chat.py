@@ -31,10 +31,10 @@ def chat(filename, args):
                 for order in dec.decode_packet(pkt):
                     if order.type == 'Handshake' and order.key == b'Chat':  # older version
                         dialog = order.value.decode()
-                        source = 'all'  # probably inaccurate
+                        source = 'global'  # probably inaccurate
                     elif order.type == 'Fields' and order.field == b'Chat':
                         dialog = order.info['target'].decode()
-                        source = 'all' if order.info.get('extra_data') is None else 'team'
+                        source = 'global' if order.info.get('extra_data') is None else 'team'
                     elif order.type == 'Fields' and order.field == b'Message':
                         dialog = order.info['target'].decode()
                         source = 'server'

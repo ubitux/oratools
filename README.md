@@ -37,13 +37,13 @@ gggggggggggggggg:
 ```
 ☭ ora-tool chat ~/.config/openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
 Replay: /home/user/.config/openra/Replays/ra/release-20190314/RAGL-S08-MASTER-GROUP-ZXG-UPS-G2.orarep
-[all]  <^^ZxGanon^^|RV>  okay
-[all]  <^^ZxGanon^^|RV>  ich nehm die map hier
-[all]               <U>  k
-[all]               <U>  glhf
-[all]  <^^ZxGanon^^|RV>  nl hf
-[all]               <U>  gg
-[all]  <^^ZxGanon^^|RV>  gg
+[global]  <^^ZxGanon^^|RV>  okay
+[global]  <^^ZxGanon^^|RV>  ich nehm die map hier
+[global]               <U>  k
+[global]               <U>  glhf
+[global]  <^^ZxGanon^^|RV>  nl hf
+[global]               <U>  gg
+[global]  <^^ZxGanon^^|RV>  gg
 ```
 
 ### Trace
