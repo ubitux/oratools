@@ -91,7 +91,7 @@ class _Extensions:
         '''Update internal files and settings with the extension located in dirname'''
         if not op.isdir(dirname):
             raise Exception(f'{dirname} is not a directory')
-        ext_files = os.listdir(dirname)
+        ext_files = [f for f in os.listdir(dirname) if op.isfile(op.join(dirname, f))]
 
         if _extension_fname not in ext_files:
             raise Exception(f'{_extension_fname} not found in {dirname}')
