@@ -111,7 +111,7 @@ class _Extensions:
     def _add_values(self, key, val_str):
         values = set(filter(None, (v.strip() for v in val_str.split(','))))
         if key not in self._data.keys():
-            raise Exception(f'Unsupported key {_key}')
+            raise Exception(f'Unsupported key {key}')
         self._data[key] |= values
 
 
