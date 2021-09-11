@@ -50,6 +50,7 @@ class _Extensions:
             Rules=set(),
             Sequences=set(),
             Weapons=set(),
+            Notifications=set(),
         )
         self._files = set()
 
