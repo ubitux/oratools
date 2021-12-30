@@ -13,6 +13,12 @@ After running `make` and entering the virtual env with `. venv/bin/activate`,
 - `ora-tool trace`: demux (split into packets) and decode (extract orders from
   packets) from the specified replay(s); useful for getting a debugging trace
 
+**Warning**: on macOS, pulling the Pillow package from pip can be challenging.
+Make sure libjpeg is installed on the system (using [brew][brew-website]: `brew
+install jpeg`).
+
+[brew-website]: https://brew.sh
+
 ## Examples
 
 ### Build Order
