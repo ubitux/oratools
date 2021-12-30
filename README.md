@@ -6,6 +6,9 @@ replay/network code.
 After running `make` and entering the virtual env with `. venv/bin/activate`,
 `ora-tool` with the following tools:
 
+- `ora-tool mappack`: map (re-)packing helper which can be used to batch mod
+  files removal/addition/replacement, strip tags, add an image overlay, etc.
+  Use `ora-tool mappack --help` for more information.
 - `ora-tool buildorder`: try to figure the build orders from the specified
   replay(s); doesn't work that great because it requires the complete game
   emulation
