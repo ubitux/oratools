@@ -141,3 +141,12 @@ TENT:
 		ExitCell: 0,2
 		Facing: 1024
 		ProductionTypes: Soldier, Infantry
+
+TENF:
+	Selectable:
+		Bounds: 48,20
+		DecorationBounds: 48,48
+	Building:
+		Footprint: x= xx ==
+		Dimensions: 2,3
+		LocalCenterOffset: 0,-200,0
